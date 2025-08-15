@@ -97,10 +97,17 @@ in
     extraLuaPackages = ls: with ls; [ luarocks ];
   };
 
-  xdg.configFile."nvim".source = pkgs.fetchFromGitHub {
-    owner = "MagicBOTAlex";
-    repo = "NVimConfigs";
-    rev = "2927ce8e62e47b0b542ae18623cb6dbee6c32add";
-    hash = "sha256-f45NJYaiBLAQ9RmjzEPzI6LBrlj/vdA+ONkdRAzAIjQ=";
+  # Screw declarative here
+  xdg.configFile."nvim".source = builtins.fetchGit {
+    url = "https://github.com/MagicBOTAlex/NVimConfigs";
+    ref = "master";   # change if the default branch is different
+    # submodules = true;  # uncomment if needed
   };
+
+  # xdg.configFile."nvim".source = pkgs.fetchFromGitHub {
+  #   owner = "MagicBOTAlex";
+  #   repo = "NVimConfigs";
+  #   rev = "2927ce8e62e47b0b542ae18623cb6dbee6c32add";
+  #   hash = "sha256-f45NJYaiBLAQ9RmjzEPzI6LBrlj/vdA+ONkdRAzAIjQ=";
+  # };
 }

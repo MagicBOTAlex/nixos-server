@@ -9,6 +9,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     { self, nixpkgs, ... }@inputs:
@@ -23,6 +27,10 @@
 
           # home manager part 2
           inputs.home-manager.nixosModules.default
+
+          inputs.nix-index-database.nixosModules.nix-index
+
+          { programs.nix-index-database.comma.enable = true; }
         ];
       };
     };

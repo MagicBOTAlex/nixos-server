@@ -40,6 +40,32 @@
     ];
   };
 
+
+
+
+
+
+  fileSystems."/mnt/stolenFromSister" = {
+    device = "/dev/disk/by-uuid/8f2c41c0-84bb-40ee-a3f8-b1bbd378d5d7";
+    fsType = "ext4";                # or "btrfs", "xfs", etc.
+      options = [ "nofail" "x-systemd.automount"];         # don't block boot if the disk is missing
+  };
+
+  fileSystems."/mnt/OtherStolenDriveFromSister" = {
+    device = "/dev/disk/by-uuid/fc16759c-24fc-46d6-99fe-865068605f46";
+    fsType = "ext4";                # or "btrfs", "xfs", etc.
+      options = [ "nofail" "x-systemd.automount"];         # don't block boot if the disk is missing
+  };
+
+  systemd.tmpfiles.rules = [
+    "d /mnt/stolenFromSister/jelly/ 0755 starr starr -"
+    "d /mnt/OtherStolenDriveFromSister/downloads/ 0755 starr starr -"
+  ];
+
+
+
+
+
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

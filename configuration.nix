@@ -14,11 +14,27 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./aliases.nix
+    ./docker.nix
+    ./modules/drivers/nvidia.nix
+
+    ./modules/python.nix
+    ./programs.nix
+    ./modules/nodejs.nix
+
+    ./modules/fishShell.nix
+
+    ./users.nix
+    ./networking/caddy.nix
+
+    ./modules/de.nix
+    # ./modules/displayOff.nix
   ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.timeout = 2;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -72,9 +88,6 @@
     enable = true;
     viAlias = true;
     vimAlias = true;
-    # extraPackages = with pkgs ; [
-    #   ripgrep fd fzf git unzip gcc
-    # ];
   };
 
   home-manager = {
@@ -84,17 +97,11 @@
     };
   };
 
-  # environment.etc."/nvim".source = builtins.fetchGit {
-  #   url = "https://github.com/MagicBOTAlex/NVimConfigs.git";
-  #   ref = "master";
-  # };
-
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the XFCE Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
+  # Root uses the exact same module
+  home-manager.users.root = { pkgs, ... }: {
+    home.stateVersion = "24.05";
+    imports = [ ./modules/nvim.nix ];
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -108,66 +115,8 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # Enable sound with pipewire.
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
-
-# Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.botserver = {
-    isNormalUser = true;
-    description = "botserver";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-    ];
-    packages = with pkgs; [
-      #  thunderbird
-    ];
-
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAhiPhFbCi64NduuV794omgS8mctBLXtqxbaEJyUo6lg botalex@DESKTOPSKTOP-ENDVV0V"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIFhTExbc9m4dCK6676wGiA8zPjE0l/9Fz2yf0IKvUvg snorre@archlinux"
-    ];
-  };
-
-  # Enable automatic login for the user.
-  services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = "botserver";
-
-  # Install firefox.
-  programs.firefox.enable = true;
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  #  environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
-  # ];
-  environment.systemPackages = with pkgs; [
-    neovim
-    wget
-    iproute2
-    curl
-    fastfetch
-  ];
 
   programs.git = {
     enable = true;
