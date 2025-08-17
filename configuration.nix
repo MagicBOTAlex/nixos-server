@@ -27,8 +27,8 @@
     ./users.nix
     ./networking/caddy.nix
 
-    ./modules/de.nix
-    # ./modules/displayOff.nix
+    # ./modules/de.nix
+    ./modules/displayOff.nix
   ];
 
   # Bootloader.

@@ -6,12 +6,13 @@
     curl
     fastfetch
     tree
-    btop
+    btop-cuda
     pigz
     ncdu
     screen
     nixfmt-tree
     ffmpeg-full
+    borgbackup
   ];
 
   programs.starship.enable = true;
