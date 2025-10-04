@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 let
@@ -56,8 +51,7 @@ let
     "NIX_LD_LIBRARY_PATH=${config.home.profileDirectory}/lib/nvim-depends/lib"
     "PKG_CONFIG_PATH=${config.home.profileDirectory}/lib/nvim-depends/pkgconfig"
   ];
-in
-{
+in {
   home.packages = with pkgs; [
     patchelf
     nvim-depends-include
@@ -65,11 +59,9 @@ in
     nvim-depends-pkgconfig
     ripgrep
   ];
-  home.extraOutputsToInstall = ["nvim-depends"];
-  home.shellAliases.nvim =
-    (concatStringsSep " " buildEnv)
-    + " SQLITE_CLIB_PATH=${pkgs.sqlite.out}/lib/libsqlite3.so "
-    + "nvim";
+  home.extraOutputsToInstall = [ "nvim-depends" ];
+  home.shellAliases.nvim = (concatStringsSep " " buildEnv)
+    + " SQLITE_CLIB_PATH=${pkgs.sqlite.out}/lib/libsqlite3.so " + "nvim";
 
   programs.neovim = {
     enable = true;
@@ -97,12 +89,12 @@ in
     extraLuaPackages = ls: with ls; [ luarocks ];
   };
 
-  # Screw declarative here
-  xdg.configFile."nvim".source = builtins.fetchGit {
-    url = "https://github.com/MagicBOTAlex/NVimConfigs";
-    ref = "master";   # change if the default branch is different
-    # submodules = true;  # uncomment if needed
-  };
+  # # Screw declarative here
+  # xdg.configFile."nvim".source = builtins.fetchGit {
+  #   url = "https://github.com/MagicBOTAlex/NVimConfigs";
+  #   ref = "master";   # change if the default branch is different
+  #   # submodules = true;  # uncomment if needed
+  # };
 
   # xdg.configFile."nvim".source = pkgs.fetchFromGitHub {
   #   owner = "MagicBOTAlex";

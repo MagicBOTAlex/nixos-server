@@ -2,13 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{
-  config,
-  pkgs,
-  lib,
-  inputs,
-  ...
-}:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   imports = [
@@ -26,6 +20,7 @@
 
     ./users.nix
     ./networking/caddy.nix
+    ./modules/buildCache.nix
 
     # ./modules/de.nix
     ./modules/displayOff.nix
@@ -72,17 +67,11 @@
     settings = {
       nix-path = lib.mapAttrsToList (n: _: "${n}=flake:${n}") inputs;
       flake-registry = ""; # optional, ensures flakes are truly self-contained
-      experimental-features = [
-        "nix-command"
-        "flakes"
-        "pipe-operators"
-      ];
+      experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
     };
   };
 
-  services.openssh = {
-    enable = true;
-  };
+  services.openssh = { enable = true; };
 
   programs.neovim = {
     enable = true;
@@ -92,9 +81,7 @@
 
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
-    users = {
-      "botserver" = import ./home.nix;
-    };
+    users = { "botserver" = import ./home.nix; };
   };
 
   # Root uses the exact same module

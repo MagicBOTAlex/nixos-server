@@ -1,9 +1,4 @@
-{
-  pkgs,
-  lib,
-  ...
-}:
-{
+{ pkgs, lib, ... }: {
   imports = [ ./modules/nvim.nix ];
 
   # packages only for this user

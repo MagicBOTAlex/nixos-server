@@ -1,4 +1,4 @@
-{pkgs,...} : {
+{ pkgs, ... }: {
   environment.systemPackages = with pkgs; [
     neovim
     wget
@@ -13,6 +13,17 @@
     nixfmt-tree
     ffmpeg-full
     borgbackup
+    p7zip
+    vtk
+    immich-cli
+    parted
+    toybox
+    gitoxide
+    (pkgs.callPackage ./modules/customPackages/shreddit/shreddit.nix { })
+    busybox
+    linuxKernel.packages.linux_6_12.turbostat
+    linuxKernel.packages.linux_6_12.cpupower
+
   ];
 
   programs.starship.enable = true;
