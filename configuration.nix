@@ -17,6 +17,7 @@
     ./modules/nodejs.nix
 
     ./modules/fishShell.nix
+    ./modules/pigs.nix
 
     ./users.nix
     ./networking/caddy.nix

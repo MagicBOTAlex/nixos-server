@@ -9,7 +9,7 @@
 
   services.caddy.virtualHosts."ha.deprived.dev" = {
     extraConfig = ''
-      reverse_proxy * 127.0.0.1:8123
+      reverse_proxy 127.0.0.1:8123
     '';
   };
 
@@ -33,50 +33,126 @@
 
   services.caddy.virtualHosts."api.deprived.dev" = {
     extraConfig = ''
-      reverse_proxy * 127.0.0.1:6333
+      @allowedOrigin header_regexp Origin ^https?://(localhost(:\d+)?|([a-z0-9-]+\.)*deprived\.dev)$
+      	@hasOrigin header Origin *
+      	@preflight method OPTIONS
+
+      	@badOrigin {
+      		not {
+      			header_regexp Origin ^https?://(localhost(:\d+)?|([a-z0-9-]+\.)*deprived\.dev)$
+      		}
+      		header Origin *
+      	}
+
+      	@preflightAllowed {
+      		method OPTIONS
+      		header_regexp Origin ^https?://(localhost(:\d+)?|([a-z0-9-]+\.)*deprived\.dev)$
+      	}
+
+      	# Allowed preflight
+      	handle @preflightAllowed {
+      		header {
+      			Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE"
+      			Access-Control-Allow-Headers "{http.request.header.Access-Control-Request-Headers}"
+      			Access-Control-Max-Age "3600"
+      			Access-Control-Allow-Credentials "true"
+      			Access-Control-Allow-Origin "{http.request.header.Origin}"
+      			Vary "Origin"
+      		}
+      		respond "" 204
+      	}
+
+      	# Preflight but missing/bad origin
+      	handle @preflight {
+      		respond "CORS origin not allowed" 403
+      	}
+
+      	# Block actual requests with bad origin
+      	handle @badOrigin {
+      		respond "CORS origin not allowed" 403
+      	}
+
+      	# Allowed origins → proxy + always add CORS (even if upstream returns 204)
+      	handle @allowedOrigin {
+      		reverse_proxy 127.0.0.1:6333 {
+      			header_down -Access-Control-*
+      			header_down -Vary
+      		}
+      		header {
+      			Access-Control-Allow-Origin "{http.request.header.Origin}"
+      			Access-Control-Allow-Credentials "true"
+      			Access-Control-Expose-Headers "Authorization"
+      			Vary "Origin"
+      		}
+      	}
+
+      	# No Origin: just proxy
+      	handle {
+      		reverse_proxy 127.0.0.1:6333
+      	}
     '';
   };
 
   services.caddy.virtualHosts."pocket.deprived.dev" = {
     extraConfig = ''
-      # Match allowed origins
-      @allowedOrigin header_regexp Origin ^https?://(localhost(:[0-9]+)?|deprived\.dev|([a-z0-9-]+\.)*deprived\.dev)$
-      @preflight method OPTIONS
+        @allowedOrigin header_regexp Origin ^https?://(localhost(:\d+)?|([a-z0-9-]+\.)*deprived\.dev)$
+      	@hasOrigin header Origin *
+      	@preflight method OPTIONS
 
-      # Preflight: answer directly
-      handle @preflight {
-        header {
-          -Access-Control-Allow-Origin
-          -Access-Control-Allow-Methods
-          -Access-Control-Allow-Headers
-          -Access-Control-Allow-Credentials
-          -Vary
-        }
-        header @allowedOrigin {
-          Access-Control-Allow-Origin "{http.request.header.Origin}"
-          Access-Control-Allow-Methods "GET,POST,PUT,PATCH,DELETE,OPTIONS"
-          Access-Control-Allow-Headers "*"
-          Access-Control-Allow-Credentials "true"
-          Vary "Origin"
-        }
-        respond 204
-      }
+      	@badOrigin {
+      		not {
+      			header_regexp Origin ^https?://(localhost(:\d+)?|([a-z0-9-]+\.)*deprived\.dev)$
+      		}
+      		header Origin *
+      	}
 
-      # Actual requests: proxy, strip upstream CORS, then set ours
-      handle {
-        reverse_proxy 127.0.0.1:3433 {
-          header_down -Access-Control-Allow-Origin
-          header_down -Access-Control-Allow-Methods
-          header_down -Access-Control-Allow-Headers
-          header_down -Access-Control-Allow-Credentials
-          header_down -Vary
-        }
-        header @allowedOrigin {
-          Access-Control-Allow-Origin "{http.request.header.Origin}"
-          Access-Control-Allow-Credentials "true"
-          Vary "Origin"
-        }
-      }
+      	@preflightAllowed {
+      		method OPTIONS
+      		header_regexp Origin ^https?://(localhost(:\d+)?|([a-z0-9-]+\.)*deprived\.dev)$
+      	}
+
+      	# Allowed preflight
+      	handle @preflightAllowed {
+      		header {
+      			Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE"
+      			Access-Control-Allow-Headers "{http.request.header.Access-Control-Request-Headers}"
+      			Access-Control-Max-Age "3600"
+      			Access-Control-Allow-Credentials "true"
+      			Access-Control-Allow-Origin "{http.request.header.Origin}"
+      			Vary "Origin"
+      		}
+      		respond "" 204
+      	}
+
+      	# Preflight but missing/bad origin
+      	handle @preflight {
+      		respond "CORS origin not allowed" 403
+      	}
+
+      	# Block actual requests with bad origin
+      	handle @badOrigin {
+      		respond "CORS origin not allowed" 403
+      	}
+
+      	# Allowed origins → proxy + always add CORS (even if upstream returns 204)
+      	handle @allowedOrigin {
+      		reverse_proxy 127.0.0.1:3433 {
+      			header_down -Access-Control-*
+      			header_down -Vary
+      		}
+      		header {
+      			Access-Control-Allow-Origin "{http.request.header.Origin}"
+      			Access-Control-Allow-Credentials "true"
+      			Access-Control-Expose-Headers "Authorization"
+      			Vary "Origin"
+      		}
+      	}
+
+      	# No Origin: just proxy
+      	handle {
+      		reverse_proxy 127.0.0.1:3433
+      	}
+
     '';
   };
 
@@ -126,6 +202,23 @@
     '';
   };
 
+  services.caddy.virtualHosts."zcol.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 127.0.0.1:7577
+    '';
+  };
+
+  services.caddy.virtualHosts."zcollection.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 127.0.0.1:7577
+    '';
+  };
+  services.caddy.virtualHosts."zcollection.mcd.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 127.0.0.1:7578
+    '';
+  };
+
   services.caddy.virtualHosts."direct.stream.deprived.dev" = {
     extraConfig = ''
       @allowKey {
@@ -145,6 +238,12 @@
   services.caddy.virtualHosts."development.deprived.dev" = {
     extraConfig = ''
       reverse_proxy * 127.0.0.1:5173
+    '';
+  };
+
+  services.caddy.virtualHosts."dev.hook.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 127.0.0.1:3322
     '';
   };
 

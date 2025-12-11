@@ -21,6 +21,7 @@
       cdn = "cd /etc/nixos";
       cpu =
         "sudo turbostat --quiet --show PkgWatt --interval 1 --num_iterations 1 | awk 'NR==2{print $1}'";
+      r = "nix run";
 
     };
 
