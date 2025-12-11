@@ -14,24 +14,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs =
-    { self, nixpkgs, ... }@inputs:
-    {
-      # configuration name matches hostname, so this system is chosen by default
-      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        # pass along all the inputs and stuff to the system function
-        specialArgs = { inherit inputs; };
-        modules = [
-          # import configuration
-          ./configuration.nix
+  outputs = { self, nixpkgs, ... }@inputs: {
+    # configuration name matches hostname, so this system is chosen by default
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      # pass along all the inputs and stuff to the system function
+      specialArgs = { inherit inputs; };
+      modules = [
+        # import configuration
+        ./configuration.nix
 
-          # home manager part 2
-          inputs.home-manager.nixosModules.default
+        # home manager part 2
+        inputs.home-manager.nixosModules.default
 
-          inputs.nix-index-database.nixosModules.nix-index
+        inputs.nix-index-database.nixosModules.nix-index
 
-          { programs.nix-index-database.comma.enable = true; }
-        ];
-      };
+        { programs.nix-index-database.comma.enable = true; }
+      ];
     };
+  };
 }

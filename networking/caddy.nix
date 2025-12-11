@@ -13,6 +13,12 @@
     '';
   };
 
+  services.caddy.virtualHosts."argocd.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy 127.0.0.1:4325
+    '';
+  };
+
   services.caddy.virtualHosts."jelly.deprived.dev" = {
     extraConfig = ''
       reverse_proxy * 127.0.0.1:8096

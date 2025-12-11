@@ -13,6 +13,7 @@
     nixfmt-tree
     ffmpeg-full
     borgbackup
+    openssl
     p7zip
     vtk
     immich-cli

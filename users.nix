@@ -2,7 +2,7 @@
   users.users.botserver = {
     isNormalUser = true;
     description = "botserver";
-    extraGroups = [ "networkmanager" "wheel" "docker" "starr" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "starr" "kubernetes" ];
     packages = with pkgs;
       [
         #  thunderbird
