@@ -12,13 +12,16 @@
       all = "sudo chmod -R a+rwx ./*";
       ng = "cd /etc/nginx/ && sudo nvim .";
       copy = "xclip -sel clip";
-      pubkey = "cat ~/.ssh/id_ed25519.pub | copy";
+      pubkey = "cat ~/.ssh/id_ed25519.pub | ${pkgs.osc}/bin/osc copy";
       up = "docker compose up -d";
       down = "docker compose down -t 0";
       inspect = "nix edit nixpkgs#$1";
       fe = "nix develop";
       fed = "nvim flake.nix";
       cdn = "cd /etc/nixos";
+      snorre = "ssh bot@spoodythe.one";
+      kube-vm =
+        "ssh -o 'UserKnownHostsFile=/dev/null' -o 'StrictHostKeyChecking=no' -p 2222 root@localhost";
       cpu =
         "sudo turbostat --quiet --show PkgWatt --interval 1 --num_iterations 1 | awk 'NR==2{print $1}'";
       r = "nix run";

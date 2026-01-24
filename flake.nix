@@ -13,15 +13,22 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    microvm = {
+      url = "github:astro/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
-  outputs = { self, nixpkgs, ... }@inputs: {
+  outputs = { self, nixpkgs, microvm, ... }@inputs: {
     # configuration name matches hostname, so this system is chosen by default
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.botkube = nixpkgs.lib.nixosSystem {
       # pass along all the inputs and stuff to the system function
       specialArgs = { inherit inputs; };
       modules = [
         # import configuration
         ./configuration.nix
+
+        inputs.microvm.nixosModules.host
 
         # home manager part 2
         inputs.home-manager.nixosModules.default

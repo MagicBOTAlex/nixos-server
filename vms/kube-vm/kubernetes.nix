@@ -23,16 +23,26 @@ in {
   ];
 
   virtualisation.containerd.enable = true;
-  environment.systemPackages = with pkgs; [ kompose kubectl kubernetes argocd ];
+  environment.systemPackages = with pkgs; [
+    kompose
+    kubectl
+    kubernetes
+    argocd
+    openiscsi
+    nfs-utils
+  ];
 
   networking.useNetworkd = true;
-  networking.extraHosts = "${kubeMasterIP} ${kubeMasterHostname}";
+  networking.extraHosts = ''
+    ${kubeMasterIP} ${kubeMasterHostname} 
+      192.168.50.82  botkube'';
   services.kubernetes = let
     api = "https://${kubeMasterHostname}:${toString kubeMasterAPIServerPort}";
   in {
     roles = [ "node" ];
     masterAddress = kubeMasterHostname;
     easyCerts = true;
+    apiserver.allowPrivileged = true;
 
     # point kubelet and other services to kube-apiserver
     kubelet.kubeconfig.server = api;
@@ -42,7 +52,8 @@ in {
     addons.dns.enable = true;
 
     # needed if you use swap
-    kubelet.extraOpts = "--fail-swap-on=false";
+    kubelet.extraOpts =
+      "--fail-swap-on=false --resolv-conf=/run/systemd/resolve/resolv.conf";
   };
 
   systemd.services."forward-argocd" = {
@@ -54,7 +65,7 @@ in {
     wantedBy = [ "multi-user.target" ];
 
     script = ''
-      ${pkgs.kubernetes}/bin/kubectl port-forward svc/argocd-server -n argocd 4325:80 || true
+      ${pkgs.kubernetes}/bin/kubectl port-forward svc/argocd-server -n argocd --address 0.0.0.0 4325:80 
     '';
     serviceConfig = { User = "botserver"; };
   };

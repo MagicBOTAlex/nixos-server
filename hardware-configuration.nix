@@ -53,6 +53,13 @@
     options = [ "nofail" "x-systemd.automount" ];
   };
 
+  # fileSystems."/mnt/benjaSteal" = {
+  #   device = "mediaslave@deprived.dev:/";
+  #   fsType = "sshfs";
+  #   options =
+  #     [ "nodev" "noatime" "allow_other" "IdentityFile=/root/.ssh/id_ed25519" ];
+  # };
+
   # fileSystems."/mnt/disk5" = {
   #   device = "/dev/disk/by-partuuid/3610155d-6d3d-4be1-9e50-7a638ccbf98c";
   #   fsType = "ext4";

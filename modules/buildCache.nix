@@ -8,6 +8,8 @@
     };
   };
 
+  nix.settings.trusted-users = [ "root" "botserver" ];
+
   imports = [ ./../networking/networkSetup.nix ];
 
   services.caddy = {

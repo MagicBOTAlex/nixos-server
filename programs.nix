@@ -14,6 +14,8 @@
     ffmpeg-full
     borgbackup
     openssl
+    wireguard-tools
+    apacheHttpd
     p7zip
     vtk
     immich-cli

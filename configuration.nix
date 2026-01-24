@@ -11,7 +11,8 @@
     ./aliases.nix
     ./modules/drivers/nvidia.nix
     ./docker.nix
-    ./modules/k8s.nix
+    # ./modules/k8s.nix
+    ./modules/oscd.nix
 
     ./modules/python.nix
     ./programs.nix
@@ -23,6 +24,8 @@
     ./users.nix
     ./networking/caddy.nix
     ./modules/buildCache.nix
+
+    ./vms/kube-vm
 
     # ./modules/de.nix
     ./modules/displayOff.nix
@@ -43,7 +46,7 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  # networking.networkmanager.enable = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Copenhagen";

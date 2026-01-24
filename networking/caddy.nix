@@ -13,9 +13,26 @@
     '';
   };
 
-  services.caddy.virtualHosts."argocd.deprived.dev" = {
+  # services.caddy.virtualHosts."argocd.deprived.dev" = {
+  #   extraConfig = ''
+  #     reverse_proxy https://127.0.0.1:4325 {
+  #       header_up Host {host}
+  #       transport http {
+  #         tls_insecure_skip_verify
+  #       }
+  #     }
+  #   '';
+  # };
+
+  services.caddy.virtualHosts."webui.deprived.dev" = {
     extraConfig = ''
-      reverse_proxy 127.0.0.1:4325
+      reverse_proxy * 127.0.0.1:3000
+    '';
+  };
+
+  services.caddy.virtualHosts."yaaumma.com" = {
+    extraConfig = ''
+      redir https://www.yaaumma.com{uri} permanent
     '';
   };
 
@@ -181,7 +198,7 @@
 
       @protected not method OPTIONS
       basicauth @protected {
-        alice $2a$14$GbqQnETcOz5fNEbS06Y0E.HxRIIgPKAK7OMijT1Bv63h3V6S/gwRG
+        alex $2a$14$GbqQnETcOz5fNEbS06Y0E.HxRIIgPKAK7OMijT1Bv63h3V6S/gwRG
       }
 
       reverse_proxy 127.0.0.1:8800
@@ -196,9 +213,79 @@
     '';
   };
 
+  services.caddy.virtualHosts."spotify.api.deprived.dev" = {
+    extraConfig = ''
+      encode zstd gzip
+
+      # 1. CORS Headers
+      # We switched "*" to "{header.Origin}" and added "Credentials: true"
+      # This allows the browser to send the Authorization header safely.
+      header {
+          Access-Control-Allow-Origin "{header.Origin}"
+          Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+          Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+          Access-Control-Allow-Credentials "true"
+          Vary "Origin"
+      }
+
+      # 2. Handle Preflight (OPTIONS)
+      # Must be defined before Basic Auth
+      @options {
+          method OPTIONS
+      }
+      respond @options 204
+
+      # 3. Protect everything EXCEPT Options
+      # (Fix: Ensure this is on a new line)
+      @protected {
+          not method OPTIONS
+      }
+
+      basicauth @protected {
+          alex $2a$14$GbqQnETcOz5fNEbS06Y0E.HxRIIgPKAK7OMijT1Bv63h3V6S/gwRG
+      }
+
+      # 4. Proxy
+      reverse_proxy 127.0.0.1:4142 {
+          header_down -Access-Control-Allow-Origin
+      }
+    '';
+  };
+
   services.caddy.virtualHosts."lyrics.deprived.dev" = {
     extraConfig = ''
+      header {
+          Access-Control-Allow-Origin "*"
+          Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+          Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+      }
+
+      @options {
+          method OPTIONS
+      }
+      respond @options 204
+
       reverse_proxy * 127.0.0.1:7444
+    '';
+  };
+
+  # Github MaintainerCD hook
+  services.caddy.virtualHosts."lyrics.hook.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 127.0.0.1:7576
+    '';
+  };
+
+  services.caddy.virtualHosts."docker.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 127.0.0.1:5000
+    '';
+  };
+
+  services.caddy.virtualHosts."docker.ui.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 127.0.0.1:6842
+
     '';
   };
 
