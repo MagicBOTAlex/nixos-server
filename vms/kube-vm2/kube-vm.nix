@@ -38,7 +38,6 @@
     openssh
     ripgrep
     dig
-    argocd
   ];
 
   # --- MicroVM Specific Settings ---
@@ -48,9 +47,15 @@
 
     # Create a tap interface or user networking
     interfaces = [{
-      type = "tap";
-      id = "microvm-tap2"; # Matches the host's second tap
-      mac = "02:00:00:00:00:02";
+      type = "user"; # 'user' networking is easiest for testing (slirp)
+      id = "eth0";
+      mac = "02:00:00:00:00:01";
+    }];
+
+    forwardPorts = [{
+      from = "host";
+      host.port = 2223;
+      guest.port = 22;
     }];
 
     # Mount the host's /nix/store explicitly (read-only)
@@ -63,43 +68,10 @@
 
     # Writable disk allocation
     volumes = [{
-      image = "/var/lib/microvms/kube-vm/kube-vm.img";
+      image = "/var/lib/microvms/kube-vm2/kube-vm2.img";
       mountPoint = "/";
       size = 512 * 4; # Size in MB
     }];
-  };
-
-  boot.kernelModules = [ "br_netfilter" ];
-
-  networking = {
-    hostName = "kube-vm";
-    useNetworkd = true;
-    firewall.enable = false;
-
-    # 1. Define the interface explicitly
-    interfaces.enp0s4.ipv4.addresses = [{
-      address = "10.0.0.3";
-      prefixLength = 24;
-    }];
-
-    # 2. Fix: Specify both address AND interface for the gateway
-    defaultGateway = {
-      address = "10.0.0.1";
-      interface = "enp0s4";
-    };
-
-    nameservers = [ "1.1.1.1" "8.8.8.8" ];
-  };
-
-  # Allow passwordless root login for testing (Do not use in production!)
-  services.getty.autologinUser = "root";
-  users.users.root.password = "";
-
-  systemd.network.enable = true;
-  systemd.network.networks."11-microvm" = {
-    matchConfig.Name = "vm-*";
-    # Attach to the bridge that was configured above
-    networkConfig.Bridge = "microvm";
   };
 
   system.stateVersion = "24.11";

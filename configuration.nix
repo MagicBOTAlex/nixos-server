@@ -26,6 +26,8 @@
     ./modules/buildCache.nix
 
     ./vms/kube-vm
+    # ./vms/kube-vm2
+    ./vms/kube-daddy
 
     # ./modules/de.nix
     ./modules/displayOff.nix

@@ -23,6 +23,9 @@
   #     }
   #   '';
   # };
+  services.caddy.virtualHosts."argocd.deprived.dev" = {
+    extraConfig = "reverse_proxy https://127.0.0.1:4325";
+  };
 
   services.caddy.virtualHosts."webui.deprived.dev" = {
     extraConfig = ''

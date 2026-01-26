@@ -13,12 +13,14 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBLSUXsao6rjC3FDtRHhh7z6wqMtA/mqL50e1Dj9a2wE botserver@botserver"
     ];
 
+    hashedPassword =
+      "$6$HpwhjoEuhRZuFhJF$jEV3SxbcGKVlRRgbDx6YpySyTHKUIOnmUD0Rd4PLXsXhbnrgeBVCPfkK.cBCUmxUeQjNTzj4CDpP4XBxLz0EV0";
+
     shell = pkgs.fish;
 
   };
 
-  programs.fish = { enable = true; };
-  documentation.man.generateCaches = false;
+  environment.variables.EDITOR = "nvim";
 
   services.openssh = { enable = true; };
   imports = [ ./../../modules/getNvim.nix ./kubernetes.nix ];
@@ -37,21 +39,55 @@
     btop
     openssh
     ripgrep
+    openssl
     dig
     argocd
   ];
+
+  programs.fish = {
+    enable = true;
+
+  };
+  documentation.man.generateCaches = false;
 
   # --- MicroVM Specific Settings ---
   microvm = {
     # Choose your hypervisor: "qemu", "firecracker", "cloud-hypervisor", etc.
     hypervisor = "qemu";
 
+    mem = 8192;
+    vcpu = 8;
+
     # Create a tap interface or user networking
     interfaces = [{
       type = "tap";
-      id = "microvm-tap2"; # Matches the host's second tap
-      mac = "02:00:00:00:00:02";
+      id = "microvm-tap1"; # Matches the host's first tap
+      mac = "02:00:00:00:00:01";
     }];
+
+    # forwardPorts = [
+    #   {
+    #     from = "host";
+    #     host.port = 22222;
+    #     guest.port = 22;
+    #   }
+    #   {
+    #     from = "host";
+    #     host.port = 6443; # Port you will access on your machine
+    #     guest.port = 6443; # Port the service is listening on inside the VM
+    #   }
+    #   {
+    #     from = "host";
+    #     host.port = 8877; # certmgr
+    #     guest.port = 8888;
+    #   }
+    #   {
+    #     from = "host";
+    #     host.port = 4325; # argocd
+    #     guest.port = 4325;
+    #   }
+    #
+    # ];
 
     # Mount the host's /nix/store explicitly (read-only)
     # This makes the VM start instantly as it shares the host store.
@@ -63,32 +99,28 @@
 
     # Writable disk allocation
     volumes = [{
-      image = "/var/lib/microvms/kube-vm/kube-vm.img";
+      image = "/var/lib/microvms/kube-daddy/kube-daddy.img";
       mountPoint = "/";
-      size = 512 * 4; # Size in MB
+      size = 32768; # Size in MB
     }];
   };
 
-  boot.kernelModules = [ "br_netfilter" ];
-
   networking = {
-    hostName = "kube-vm";
+    hostName = "kube-daddy";
     useNetworkd = true;
-    firewall.enable = false;
+    firewall.enable =
+      false; # Keep disabled for easier testing, or allow port 22
 
-    # 1. Define the interface explicitly
     interfaces.enp0s4.ipv4.addresses = [{
-      address = "10.0.0.3";
+      address = "10.0.0.2";
       prefixLength = 24;
     }];
 
-    # 2. Fix: Specify both address AND interface for the gateway
     defaultGateway = {
       address = "10.0.0.1";
       interface = "enp0s4";
     };
-
-    nameservers = [ "1.1.1.1" "8.8.8.8" ];
+    nameservers = [ "1.1.1.1" ];
   };
 
   # Allow passwordless root login for testing (Do not use in production!)
@@ -104,3 +136,4 @@
 
   system.stateVersion = "24.11";
 }
+

@@ -21,7 +21,11 @@
       cdn = "cd /etc/nixos";
       snorre = "ssh bot@spoodythe.one";
       kube-vm =
-        "ssh -o 'UserKnownHostsFile=/dev/null' -o 'StrictHostKeyChecking=no' -p 2222 root@localhost";
+        "ssh -o 'UserKnownHostsFile=/dev/null' -o 'StrictHostKeyChecking=no' root@10.0.0.3";
+      kube-vm2 =
+        "ssh -o 'UserKnownHostsFile=/dev/null' -o 'StrictHostKeyChecking=no' -p 2223 root@localhost";
+      kube-daddy =
+        "ssh -o 'UserKnownHostsFile=/dev/null' -o 'StrictHostKeyChecking=no' root@10.0.0.2";
       cpu =
         "sudo turbostat --quiet --show PkgWatt --interval 1 --num_iterations 1 | awk 'NR==2{print $1}'";
       r = "nix run";
