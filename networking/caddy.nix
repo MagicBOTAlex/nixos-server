@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   imports = [ ./networkSetup.nix ];
 
   services.caddy.virtualHosts."immich.deprived.dev" = {
@@ -24,7 +25,9 @@
   #   '';
   # };
   services.caddy.virtualHosts."argocd.deprived.dev" = {
-    extraConfig = "reverse_proxy https://127.0.0.1:4325";
+    extraConfig = ''
+      reverse_proxy * 10.0.0.2:4325
+    '';
   };
 
   services.caddy.virtualHosts."webui.deprived.dev" = {
@@ -54,6 +57,31 @@
   services.caddy.virtualHosts."penpot.deprived.dev" = {
     extraConfig = ''
       reverse_proxy * 127.0.0.1:5544
+    '';
+  };
+  services.caddy.virtualHosts."akupunktur-herlev.dk" = {
+    extraConfig = ''
+      redir https://www.akupunktur-herlev.dk{uri} 301
+    '';
+  };
+  services.caddy.virtualHosts."www.akupunktur-herlev.dk" = {
+    extraConfig = ''
+      reverse_proxy 127.0.0.1:6642 {
+         header_up Host {host}
+         header_up X-Real-IP {remote_host}
+         header_up X-Forwarded-Proto {scheme}
+      }
+    '';
+  };
+
+  services.caddy.virtualHosts."devcam.deprived.dev" = {
+    extraConfig = ''
+      @protected not method OPTIONS
+      basicauth @protected {
+        alex $2a$14$GbqQnETcOz5fNEbS06Y0E.HxRIIgPKAK7OMijT1Bv63h3V6S/gwRG
+      }
+
+      reverse_proxy * 192.168.50.85:80
     '';
   };
 

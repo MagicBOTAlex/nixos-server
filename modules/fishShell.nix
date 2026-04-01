@@ -1,6 +1,8 @@
-{pkgs, ...} : {
+{ pkgs, ... }:
+{
   programs.fish.enable = true;
   documentation.man.generateCaches = false;
 
   users.users."botserver".shell = pkgs.fish;
+  users.users.root.shell = pkgs.fish;
 }

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -19,6 +24,7 @@ let
     zstd
     glib
     libcxx
+    lua
   ];
 
   makePkgConfigPath = x: makeSearchPathOutput "dev" "lib/pkgconfig" x;
@@ -51,17 +57,21 @@ let
     "NIX_LD_LIBRARY_PATH=${config.home.profileDirectory}/lib/nvim-depends/lib"
     "PKG_CONFIG_PATH=${config.home.profileDirectory}/lib/nvim-depends/pkgconfig"
   ];
-in {
+in
+{
   home.packages = with pkgs; [
     patchelf
     nvim-depends-include
     nvim-depends-library
     nvim-depends-pkgconfig
     ripgrep
+    lua
   ];
   home.extraOutputsToInstall = [ "nvim-depends" ];
-  home.shellAliases.nvim = (concatStringsSep " " buildEnv)
-    + " SQLITE_CLIB_PATH=${pkgs.sqlite.out}/lib/libsqlite3.so " + "nvim";
+  home.shellAliases.nvim =
+    (concatStringsSep " " buildEnv)
+    + " SQLITE_CLIB_PATH=${pkgs.sqlite.out}/lib/libsqlite3.so "
+    + "nvim";
 
   programs.neovim = {
     enable = true;
@@ -84,6 +94,8 @@ in {
       yarn
       texlivePackages.latex
       tree-sitter
+      luarocks
+      lua
     ];
 
     extraLuaPackages = ls: with ls; [ luarocks ];

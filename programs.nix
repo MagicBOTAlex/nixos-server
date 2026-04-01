@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   environment.systemPackages = with pkgs; [
     neovim
     wget
@@ -17,6 +18,9 @@
     wireguard-tools
     apacheHttpd
     p7zip
+    kubectl
+    lua5_1
+    luarocks
     vtk
     immich-cli
     parted
