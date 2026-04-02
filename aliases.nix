@@ -27,6 +27,7 @@
       r = "nix run";
       wipe = "sudo rm -fr /var/lib/microvms/kube-* || sudo rm -fr /var/lib/microvms/shared/kube";
       wg-keys = "wg genkey > privatekey && wg pubkey < privatekey > publickey";
+      k = "kubectl";
 
     };
 

@@ -10,7 +10,12 @@ in
   networking.firewall.enable = false;
 
   # packages for administration tasks
-  environment.systemPackages = with pkgs; [ kompose kubectl kubernetes ];
+  environment.systemPackages = with pkgs; [
+    kompose
+    kubectl
+    kubernetes
+    kubernetes-helm
+  ];
 
   services.kubernetes =
     let
@@ -33,4 +38,3 @@ in
       kubelet.extraOpts = "--fail-swap-on=false";
     };
 }
-

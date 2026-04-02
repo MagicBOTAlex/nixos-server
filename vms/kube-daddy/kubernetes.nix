@@ -22,6 +22,7 @@ in
 
   imports = [
     ./argo-forward.nix
+    ./jelly-forward.nix
     ./longhorn-deps.nix
   ];
 

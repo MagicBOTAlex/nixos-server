@@ -20,6 +20,7 @@
     p7zip
     kubectl
     lua5_1
+    jq
     luarocks
     vtk
     immich-cli
