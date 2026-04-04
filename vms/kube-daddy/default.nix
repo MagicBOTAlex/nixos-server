@@ -60,6 +60,12 @@
         #   proto = "tcp";
         # }
         {
+          # Netbird
+          sourcePort = 3478;
+          destination = "10.0.0.2:3478";
+          proto = "udp";
+        }
+        {
           sourcePort = 6443;
           destination = "10.0.0.2:6443";
           proto = "tcp";

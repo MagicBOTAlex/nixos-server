@@ -44,7 +44,13 @@
 
   services.caddy.virtualHosts."jelly.deprived.dev" = {
     extraConfig = ''
-      reverse_proxy * 127.0.0.1:8096
+      reverse_proxy * 10.0.0.2:8096
+    '';
+  };
+
+  services.caddy.virtualHosts."netbird.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 10.0.0.2:3324
     '';
   };
 

@@ -15,7 +15,7 @@
 
     script = ''
       sleep 5
-      ${pkgs.kubernetes}/bin/kubectl port-forward jellyfin -n argocd 8096:8096 --address 0.0.0.0 || true
+      ${pkgs.kubernetes}/bin/kubectl -n jellyfin port-forward deployment/jellyfin-deployment 8096:8096 --address 0.0.0.0 || true
     '';
 
     serviceConfig = {
