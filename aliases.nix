@@ -28,6 +28,7 @@
       wipe = "sudo rm -fr /var/lib/microvms/kube-* || sudo rm -fr /var/lib/microvms/shared/kube";
       wg-keys = "wg genkey > privatekey && wg pubkey < privatekey > publickey";
       k = "kubectl";
+      metal = "ssh metal@192.168.50.59";
 
     };
 

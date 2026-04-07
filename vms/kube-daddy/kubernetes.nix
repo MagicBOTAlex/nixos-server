@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   # When using easyCerts=true the IP Address must resolve to the master on creation.
@@ -17,7 +16,9 @@ in
     ${kubeMasterIP} ${kubeMasterHostname}
     10.0.0.2 kube-daddy
     10.0.0.4 kube-desk
-    10.0.0.5 kube-snorre'';
+    10.0.0.5 kube-snorre
+    10.0.0.8 kube-metal
+  '';
   networking.firewall.enable = false;
 
   imports = [
@@ -45,6 +46,25 @@ in
     apiserver = {
       securePort = kubeMasterAPIServerPort;
       advertiseAddress = kubeMasterIP;
+
+      extraOpts =
+        let
+          admissionConfig = pkgs.writeText "admission-config.yaml" ''
+            apiVersion: apiserver.config.k8s.io/v1
+            kind: AdmissionConfiguration
+            plugins:
+            - name: PodSecurity
+              configuration:
+                apiVersion: pod-security.admission.config.k8s.io/v1
+                kind: PodSecurityConfiguration
+                defaults:
+                  enforce: "baseline"
+                  enforce-version: "latest"
+                exemptions:
+                  namespaces: [ "kube-system" ]
+          '';
+        in
+        "--admission-control-config-file=${admissionConfig}";
     };
 
     flannel.enable = true;
@@ -53,7 +73,7 @@ in
     addons.dns.enable = true;
 
     # needed if you use swap
-    kubelet.extraOpts = "--fail-swap-on=false --resolv-conf=/run/systemd/resolve/resolv.conf";
+    kubelet.extraOpts = "--fail-swap-on=false --allow-privileged=true --resolv-conf=/run/systemd/resolve/resolv.conf";
   };
 
   services.flannel = {
