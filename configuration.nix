@@ -27,7 +27,8 @@
     ./modules/pigs.nix
 
     ./users.nix
-    ./networking/caddy.nix
+    # ./networking/caddy.nix
+    ./networking/nginx.nix
     ./modules/buildCache.nix
 
     ./modules/nfs.nix

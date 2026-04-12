@@ -21,6 +21,7 @@
     kubectl
     lua5_1
     jq
+    argocd
     osc
     luarocks
     vtk
