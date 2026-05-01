@@ -3,11 +3,13 @@
 {
   imports = [ ./networkSetup.nix ];
 
+  # Ensure the NixOS firewall allows HTTP/HTTPS traffic
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+
   services.nginx = {
     enable = true;
-    
-    # Highly recommended: automatically adds standard proxy headers 
-    # (Host, X-Real-IP, X-Forwarded-For, etc.) mirroring Caddy's default behavior.
+
+    # Automatically handles proxy headers (Host, X-Real-IP, X-Forwarded-For, etc.)
     recommendedProxySettings = true;
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
@@ -25,33 +27,44 @@
 
       # --- Simple Proxies ---
 
-      "immich.deprived.dev".locations."/".proxyPass = "http://127.0.0.1:2283";
-      "ha.deprived.dev".locations."/".proxyPass = "http://127.0.0.1:8123";
-      "argocd.deprived.dev".locations."/".proxyPass = "http://10.0.0.2:4325";
-      "webui.deprived.dev".locations."/".proxyPass = "http://127.0.0.1:3000";
-      "jelly.deprived.dev".locations."/".proxyPass = "http://10.0.0.2:8096";
-      "netbird.deprived.dev".locations."/".proxyPass = "http://10.0.0.2:3324";
-      "seer.deprived.dev".locations."/".proxyPass = "http://127.0.0.1:5055";
-      "penpot.deprived.dev".locations."/".proxyPass = "http://127.0.0.1:5544";
-      "www.akupunktur-herlev.dk".locations."/".proxyPass = "http://127.0.0.1:6642";
-      "lyrics.hook.deprived.dev".locations."/".proxyPass = "http://127.0.0.1:7576";
-      "docker.deprived.dev".locations."/".proxyPass = "http://127.0.0.1:5000";
-      "docker.ui.deprived.dev".locations."/".proxyPass = "http://127.0.0.1:6842";
-      "zhenss.deprived.dev".locations."/".proxyPass = "http://127.0.0.1:8388";
-      "zcol.deprived.dev".locations."/".proxyPass = "http://127.0.0.1:7577";
-      "zcollection.deprived.dev".locations."/".proxyPass = "http://127.0.0.1:7577";
-      "zcollection.mcd.deprived.dev".locations."/".proxyPass = "http://127.0.0.1:7578";
-      "development.deprived.dev".locations."/".proxyPass = "http://127.0.0.1:5173";
-      "dev.hook.deprived.dev".locations."/".proxyPass = "http://127.0.0.1:3322";
+      "immich.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://127.0.0.1:2283"; };
+      "ha.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://127.0.0.1:8123"; };
+      "argocd.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://10.0.0.2:4325"; };
+      "webui.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://127.0.0.1:3000"; };
+      "jelly.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://10.0.0.2:8096"; };
+      "netbird.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://10.0.0.2:3324"; };
+      "seer.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://127.0.0.1:5055"; };
+      "penpot.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://127.0.0.1:5544"; };
+      "www.akupunktur-herlev.dk" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://127.0.0.1:6642"; };
+      "lyrics.hook.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://127.0.0.1:7576"; };
+      "docker.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://127.0.0.1:5000"; };
+      "docker.ui.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://127.0.0.1:6842"; };
+      "zhenss.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://127.0.0.1:8388"; };
+      "zcol.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://127.0.0.1:7577"; };
+      "zcollection.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://127.0.0.1:7577"; };
+      "zcollection.mcd.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://127.0.0.1:7578"; };
+      "development.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://127.0.0.1:5173"; };
+      "dev.hook.deprived.dev" = { forceSSL = true; enableACME = true; locations."/".proxyPass = "http://127.0.0.1:3322"; };
 
       # --- Redirects ---
-      
-      "yaaumma.com".globalRedirect = "www.yaaumma.com";
-      "akupunktur-herlev.dk".globalRedirect = "www.akupunktur-herlev.dk";
+
+      "yaaumma.com" = {
+        forceSSL = true;
+        enableACME = true;
+        globalRedirect = "www.yaaumma.com";
+      };
+
+      "akupunktur-herlev.dk" = {
+        forceSSL = true;
+        enableACME = true;
+        globalRedirect = "www.akupunktur-herlev.dk";
+      };
 
       # --- Complex Proxies ---
 
       "devcam.deprived.dev" = {
+        forceSSL = true;
+        enableACME = true;
         locations."/" = {
           proxyPass = "http://192.168.50.85:80";
           extraConfig = ''
@@ -66,6 +79,8 @@
       };
 
       "api.deprived.dev" = {
+        forceSSL = true;
+        enableACME = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:6333";
           extraConfig = ''
@@ -102,6 +117,8 @@
       };
 
       "pocket.deprived.dev" = {
+        forceSSL = true;
+        enableACME = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:3433";
           extraConfig = ''
@@ -138,6 +155,8 @@
       };
 
       "spotify.playing.deprived.dev" = {
+        forceSSL = true;
+        enableACME = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:8800";
           extraConfig = ''
@@ -166,6 +185,8 @@
       };
 
       "spotify.api.deprived.dev" = {
+        forceSSL = true;
+        enableACME = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:4142";
           extraConfig = ''
@@ -195,6 +216,8 @@
       };
 
       "lyrics.deprived.dev" = {
+        forceSSL = true;
+        enableACME = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:7444";
           extraConfig = ''
@@ -212,6 +235,8 @@
       };
 
       "direct.stream.deprived.dev" = {
+        forceSSL = true;
+        enableACME = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:3344";
           extraConfig = ''
@@ -223,6 +248,8 @@
       };
 
       "internal.deprived.dev" = {
+        forceSSL = true;
+        enableACME = true;
         extraConfig = ''
           if ($request_method !~ ^(GET|POST)$) {
               return 405;
@@ -251,7 +278,7 @@
           '';
         };
       };
-      
+
     };
   };
 }

@@ -63,6 +63,20 @@ in
                 exemptions:
                   namespaces: [ "kube-system" ]
           '';
+          authConfig = pkgs.writeTextFile {
+            name = "authentication-config.yaml";
+            text = ''
+              issuer:
+                url: https://auth.deprived.dev/application/o/kubernetes-cluster/
+                audiences: kubernetes-cluster
+              claimMappings:
+                username:
+                  claim: email
+                groups:
+                  claim: groups
+                  prefix: "oidc:"
+            '';
+          };
         in
         "--admission-control-config-file=${admissionConfig}";
     };
@@ -73,11 +87,28 @@ in
     addons.dns.enable = true;
 
     # needed if you use swap
-    kubelet.extraOpts = "--fail-swap-on=false --allow-privileged=true --resolv-conf=/run/systemd/resolve/resolv.conf";
+    kubelet.extraOpts = "--fail-swap-on=false --resolv-conf=/run/systemd/resolve/resolv.conf";
   };
 
   services.flannel = {
     iface = "br0";
     publicIp = "10.0.0.2";
+  };
+
+
+  systemd.services."cert-provider" = {
+    description = "serves the cert for control plane on wireguard interface";
+
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = {
+      ExecStart = "${pkgs.python3}/bin/python3 -m http.server 33333 --bind 10.0.0.2";
+
+      # Restart settings
+      Restart = "always";
+      RestartSec = "5s";
+      WorkingDirectory = "/var/lib/kubernetes/secrets";
+    };
   };
 }

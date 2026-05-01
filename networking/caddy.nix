@@ -2,6 +2,8 @@
 {
   imports = [ ./networkSetup.nix ];
 
+  services.caddy.enable = true;
+
   services.caddy.virtualHosts."immich.deprived.dev" = {
     extraConfig = ''
       reverse_proxy * 127.0.0.1:2283
@@ -39,6 +41,12 @@
   services.caddy.virtualHosts."yaaumma.com" = {
     extraConfig = ''
       redir https://www.yaaumma.com{uri} permanent
+    '';
+  };
+
+  services.caddy.virtualHosts."api-ikhlas.systemfutura.com" = {
+    extraConfig = ''
+      reverse_proxy http://api.ikhlas.dk
     '';
   };
 

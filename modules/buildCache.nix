@@ -13,7 +13,7 @@
   imports = [ ./../networking/networkSetup.nix ];
 
   services.caddy = {
-    enable = true;
+    # enable = true;
     virtualHosts."cache.deprived.dev" = {
       extraConfig = ''
         reverse_proxy localhost:5444
