@@ -2,7 +2,8 @@
 {
   environment.systemPackages = with pkgs; [
     nodejs_22
-    nodePackages.live-server
-    nodePackages.serve
+    serve
+    live-server
+
   ];
 }

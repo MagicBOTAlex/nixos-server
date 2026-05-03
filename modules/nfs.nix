@@ -5,6 +5,7 @@
   fileSystems."/export" = {
     device = "/kube-store";
     options = [ "bind" ];
+    fsType = "none";
   };
 
   services.nfs.server.enable = true;

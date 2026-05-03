@@ -21,7 +21,7 @@
   documentation.man.generateCaches = false;
 
   services.openssh = { enable = true; };
-  imports = [ ./../../modules/getNvim.nix ./kubernetes.nix ];
+  imports = [ ./../../modules/getNvim.nix ./kubernetes/kubernetes.nix ];
   environment.systemPackages = with pkgs; [
     neovim
     git
