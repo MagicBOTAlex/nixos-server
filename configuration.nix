@@ -33,9 +33,12 @@
 
     ./modules/nfs.nix
 
-    ./vms/kube-vm
+    ./kubenetes
+
+    # ./vms/kube-vm
     # ./vms/kube-vm2
-    ./vms/kube-daddy
+    # ./vms/kube-daddy
+    # ./vms/kube-networking.nix
     # ./networking/wireguard-kube.nix
 
     # ./modules/de.nix

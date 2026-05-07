@@ -45,6 +45,8 @@
   microvm = {
     # Choose your hypervisor: "qemu", "firecracker", "cloud-hypervisor", etc.
     hypervisor = "qemu";
+    vcpu = 8;
+    mem = 8192 / 3;
 
     # Create a tap interface or user networking
     interfaces = [{
@@ -65,11 +67,28 @@
     volumes = [{
       image = "/var/lib/microvms/kube-vm/kube-vm.img";
       mountPoint = "/";
-      size = 512 * 4; # Size in MB
+      size = 512 * 8; # Size in MB
     }];
   };
 
-  boot.kernelModules = [ "br_netfilter" ];
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = 1;
+    "net.ipv6.conf.all.forwarding" = 1; 
+  };
+
+    systemd.services."load-kernel-modules" = {
+    enable = true;
+    description = "Modprobe kernel modules";
+    # before = [ "flannel.service" ];
+    wantedBy = [
+      "multi-user.target"
+      # "flannel.service"
+    ];
+
+    script = ''
+      ${pkgs.kmod}/bin/modprobe br_netfilter
+    '';
+  };
 
   networking = {
     hostName = "kube-vm";
