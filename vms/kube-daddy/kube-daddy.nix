@@ -28,7 +28,7 @@
   };
   imports = [
     ./../../modules/getNvim.nix
-    ./kubernetes.nix
+    # ./kubernetes.nix
     # ./wg-snorre.nix
   ];
   environment.systemPackages = with pkgs; [

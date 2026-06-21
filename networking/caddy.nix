@@ -12,7 +12,7 @@
 
   services.caddy.virtualHosts."ha.deprived.dev" = {
     extraConfig = ''
-      reverse_proxy 127.0.0.1:8123
+      reverse_proxy 192.168.50.49:8123
     '';
   };
 
@@ -73,6 +73,11 @@
       reverse_proxy * 127.0.0.1:5544
     '';
   };
+  services.caddy.virtualHosts."oc2.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 127.0.0.1:5233
+    '';
+  };
   services.caddy.virtualHosts."akupunktur-herlev.dk" = {
     extraConfig = ''
       redir https://www.akupunktur-herlev.dk{uri} 301
@@ -95,7 +100,7 @@
         alex $2a$14$GbqQnETcOz5fNEbS06Y0E.HxRIIgPKAK7OMijT1Bv63h3V6S/gwRG
       }
 
-      reverse_proxy * 192.168.50.85:80
+      reverse_proxy * 192.168.50.58:3232
     '';
   };
 

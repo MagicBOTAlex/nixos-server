@@ -14,7 +14,8 @@
       ExecStart = ''${pkgs.kubernetes}/bin/kubelet \
       --config=/var/lib/kubelet/config.yaml \
       --kubeconfig=/etc/kubernetes/kubelet.conf \
-      --pod-manifest-path=/etc/kubernetes/manifests
+      --pod-manifest-path=/etc/kubernetes/manifests \
+      --fail-swap-on=false
       '';
 
       Restart = "always";

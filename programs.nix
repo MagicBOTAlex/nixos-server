@@ -23,6 +23,8 @@
     jq
     argocd
     osc
+    wget2
+    viu
     luarocks
     vtk
     immich-cli

@@ -19,6 +19,8 @@
     # ./modules/k8s.nix
     ./modules/oscd.nix
 
+    ./ports.nix
+
     ./modules/python.nix
     ./programs.nix
     ./modules/nodejs.nix
@@ -30,6 +32,7 @@
     ./networking/caddy.nix
     # ./networking/nginx.nix
     ./modules/buildCache.nix
+    ./modules/github-runner.nix
 
     ./modules/nfs.nix
 
@@ -37,8 +40,8 @@
 
     # ./vms/kube-vm
     # ./vms/kube-vm2
-    # ./vms/kube-daddy
-    # ./vms/kube-networking.nix
+    ./vms/kube-daddy
+    ./vms/kube-networking.nix
     # ./networking/wireguard-kube.nix
 
     # ./modules/de.nix
