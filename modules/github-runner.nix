@@ -4,7 +4,7 @@
 { pkgs, ... }: {
   services.github-runners = {
     # You can define multiple distinct runners here
-    my-nixos-runner = {
+    botserver = {
       enable = true;
       url = "https://github.com/Countr-Electronics/Firmware"; # Or organization URL
       tokenFile = "/var/lib/github-runner/token";
