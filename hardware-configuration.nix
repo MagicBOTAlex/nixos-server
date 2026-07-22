@@ -4,17 +4,23 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+    ./mediaNfs.nix
+  ];
 
   boot.initrd.availableKernelModules =
     [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" "ip_tables"
+  boot.kernelModules = [
+    "kvm-amd"
+    "ip_tables"
     "iptable_filter"
     "iptable_nat"
     "iptable_mangle"
     "ip6_tables"
-    "ip6table_filter" ];
+    "ip6table_filter"
+  ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
@@ -28,35 +34,35 @@
     options = [ "fmask=0077" "dmask=0077" ];
   };
 
-  fileSystems."/mnt/stolenFromSister" = {
-    device = "/dev/disk/by-uuid/8f2c41c0-84bb-40ee-a3f8-b1bbd378d5d7";
-    fsType = "ext4"; # or "btrfs", "xfs", etc.
-    options = [
-      "nofail"
-      "x-systemd.automount"
-    ]; # don't block boot if the disk is missing
-  };
+  # fileSystems."/mnt/stolenFromSister" = {
+  #   device = "/dev/disk/by-uuid/8f2c41c0-84bb-40ee-a3f8-b1bbd378d5d7";
+  #   fsType = "ext4"; # or "btrfs", "xfs", etc.
+  #   options = [
+  #     "nofail"
+  #     "x-systemd.automount"
+  #   ]; # don't block boot if the disk is missing
+  # };
 
-  fileSystems."/mnt/OtherStolenDriveFromSister" = {
-    device = "/dev/disk/by-uuid/fc16759c-24fc-46d6-99fe-865068605f46";
-    fsType = "ext4"; # or "btrfs", "xfs", etc.
-    options = [
-      "nofail"
-      "x-systemd.automount"
-    ]; # don't block boot if the disk is missing
-  };
+  # fileSystems."/mnt/OtherStolenDriveFromSister" = {
+  #   device = "/dev/disk/by-uuid/fc16759c-24fc-46d6-99fe-865068605f46";
+  #   fsType = "ext4"; # or "btrfs", "xfs", etc.
+  #   options = [
+  #     "nofail"
+  #     "x-systemd.automount"
+  #   ]; # don't block boot if the disk is missing
+  # };
 
-  fileSystems."/mnt/disk3" = {
-    device = "/dev/disk/by-partuuid/54084a5e-2c7f-4ec9-8ee7-9ede76c79f40";
-    fsType = "ext4";
-    options = [ "nofail" "x-systemd.automount" ];
-  };
+  # fileSystems."/mnt/disk3" = {
+  #   device = "/dev/disk/by-partuuid/54084a5e-2c7f-4ec9-8ee7-9ede76c79f40";
+  #   fsType = "ext4";
+  #   options = [ "nofail" "x-systemd.automount" ];
+  # };
 
-  fileSystems."/mnt/disk4" = {
-    device = "/dev/disk/by-partuuid/9df16012-ef2f-4091-aa24-632d98e6be51";
-    fsType = "ext4";
-    options = [ "nofail" "x-systemd.automount" ];
-  };
+  # fileSystems."/mnt/disk4" = {
+  #   device = "/dev/disk/by-partuuid/9df16012-ef2f-4091-aa24-632d98e6be51";
+  #   fsType = "ext4";
+  #   options = [ "nofail" "x-systemd.automount" ];
+  # };
 
   # fileSystems."/mnt/benjaSteal" = {
   #   device = "mediaslave@deprived.dev:/";

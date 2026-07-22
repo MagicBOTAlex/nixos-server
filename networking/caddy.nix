@@ -16,6 +16,12 @@
     '';
   };
 
+  services.caddy.virtualHosts."trans.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy 192.168.50.58:1422
+    '';
+  };
+
   # services.caddy.virtualHosts."argocd.deprived.dev" = {
   #   extraConfig = ''
   #     reverse_proxy https://127.0.0.1:4325 {
@@ -26,11 +32,11 @@
   #     }
   #   '';
   # };
-  services.caddy.virtualHosts."argocd.deprived.dev" = {
-    extraConfig = ''
-      reverse_proxy * 10.0.0.2:4325
-    '';
-  };
+  # services.caddy.virtualHosts."argocd.deprived.dev" = {
+  #   extraConfig = ''
+  #     reverse_proxy * 10.0.0.2:4325
+  #   '';
+  # };
 
   services.caddy.virtualHosts."webui.deprived.dev" = {
     extraConfig = ''
@@ -52,15 +58,15 @@
 
   services.caddy.virtualHosts."jelly.deprived.dev" = {
     extraConfig = ''
-      reverse_proxy * 10.0.0.2:8096
+      reverse_proxy * 127.0.0.1:8096
     '';
   };
 
-  services.caddy.virtualHosts."netbird.deprived.dev" = {
-    extraConfig = ''
-      reverse_proxy * 10.0.0.2:3324
-    '';
-  };
+  # services.caddy.virtualHosts."netbird.deprived.dev" = {
+  #   extraConfig = ''
+  #     reverse_proxy * 10.0.0.2:3324
+  #   '';
+  # };
 
   services.caddy.virtualHosts."seer.deprived.dev" = {
     extraConfig = ''
@@ -68,16 +74,16 @@
     '';
   };
 
-  services.caddy.virtualHosts."penpot.deprived.dev" = {
-    extraConfig = ''
-      reverse_proxy * 127.0.0.1:5544
-    '';
-  };
-  services.caddy.virtualHosts."oc2.deprived.dev" = {
-    extraConfig = ''
-      reverse_proxy * 127.0.0.1:5233
-    '';
-  };
+  # services.caddy.virtualHosts."penpot.deprived.dev" = {
+  #   extraConfig = ''
+  #     reverse_proxy * 127.0.0.1:5544
+  #   '';
+  # };
+  # services.caddy.virtualHosts."oc2.deprived.dev" = {
+  #   extraConfig = ''
+  #     reverse_proxy * 127.0.0.1:5233
+  #   '';
+  # };
   services.caddy.virtualHosts."akupunktur-herlev.dk" = {
     extraConfig = ''
       redir https://www.akupunktur-herlev.dk{uri} 301
@@ -339,11 +345,11 @@
     '';
   };
 
-  services.caddy.virtualHosts."zhenss.deprived.dev" = {
-    extraConfig = ''
-      reverse_proxy * 127.0.0.1:8388
-    '';
-  };
+  # services.caddy.virtualHosts."zhenss.deprived.dev" = {
+  #   extraConfig = ''
+  #     reverse_proxy * 127.0.0.1:8388
+  #   '';
+  # };
 
   services.caddy.virtualHosts."zcol.deprived.dev" = {
     extraConfig = ''
@@ -362,27 +368,27 @@
     '';
   };
 
-  services.caddy.virtualHosts."direct.stream.deprived.dev" = {
-    extraConfig = ''
-      @allowKey {
-        query key=0c156f3d-dc1d-489f-866e-69e306249e92
-      }
+  # services.caddy.virtualHosts."direct.stream.deprived.dev" = {
+  #   extraConfig = ''
+  #     @allowKey {
+  #       query key=0c156f3d-dc1d-489f-866e-69e306249e92
+  #     }
+  #
+  #     route {
+  #       handle @allowKey {
+  #         reverse_proxy http://127.0.0.1:3344
+  #       }
+  #
+  #       respond "Forbidden" 403
+  #     }
+  #   '';
+  # };
 
-      route {
-        handle @allowKey {
-          reverse_proxy http://127.0.0.1:3344
-        }
-
-        respond "Forbidden" 403
-      }
-    '';
-  };
-
-  services.caddy.virtualHosts."development.deprived.dev" = {
-    extraConfig = ''
-      reverse_proxy * 127.0.0.1:5173
-    '';
-  };
+  # services.caddy.virtualHosts."development.deprived.dev" = {
+  #   extraConfig = ''
+  #     reverse_proxy * 127.0.0.1:5173
+  #   '';
+  # };
 
   services.caddy.virtualHosts."dev.hook.deprived.dev" = {
     extraConfig = ''
