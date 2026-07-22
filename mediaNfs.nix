@@ -27,7 +27,7 @@ let
 in
 {
   boot.supportedFilesystems = [ "nfs" ];
-  
+
   # Note: rpcbind is optional for NFSv4-only setups, but good practice to leave on.
   services.rpcbind.enable = true;
 
