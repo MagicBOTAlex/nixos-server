@@ -6,8 +6,8 @@
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    # ./mediaNfs.nix
-    ./mediaNvme.nix
+    ./mediaNfs.nix
+    # ./mediaNvme.nix
   ];
 
   boot.initrd.availableKernelModules =

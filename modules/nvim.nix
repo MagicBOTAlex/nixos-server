@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -100,6 +99,8 @@ in
 
     extraLuaPackages = ls: with ls; [ luarocks ];
   };
+
+  xdg.configFile."nvim/init.lua".enable = lib.mkForce false;
 
   # # Screw declarative here
   # xdg.configFile."nvim".source = builtins.fetchGit {
