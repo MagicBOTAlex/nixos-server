@@ -9,21 +9,41 @@
 
   # Open UDP port 51100
   networking.firewall.allowedUDPPorts = [ 51100 ];
+  networking.nat = {
+    enable = true;
+    externalInterface = "enp8s0";
+    internalInterfaces = [ "wg-countr" ];
+  };
 
-  # WireGuard configuration
+  networking.firewall.extraCommands = ''
+    iptables -A FORWARD -i wg-countr -o wg-countr -j ACCEPT
+  '';
+
   networking.wireguard.interfaces = {
-    wg0 = {
-      ips = [ "10.100.0.1/24" ];
+    # WireGuard configuration
+    wg-countr = {
+      ips = [ "198.18.0.1/24" ];
       listenPort = 51100;
 
       # Load the key dynamically from file at runtime
-      privateKeyFile = "/wireguard/private.key";
+      privateKeyFile = "/wireguard/server_private.key";
+
 
       peers = [
         {
-          # Client's public key
-          publicKey = "smhjztUH9NA+Nal+YHrmDQVgOtN01EPhASvgPlkQmRc=";
-          allowedIPs = [ "10.100.0.2/32" ];
+          # countr
+          publicKey = "fqx8ZDgNxgkd1uAQQzCkYJZPvZiGVsNZa3TwGk4fiQw=";
+          allowedIPs = [ "198.18.0.2/32" ];
+        }
+        {
+          # BOTAndroid
+          publicKey = "8D8OdmzOvhRRR72hiVUaLKzAC0GxJE5tC/T2GIXDtTo=";
+          allowedIPs = [ "198.18.0.3/32" ];
+        }
+        {
+          # Desk
+          publicKey = "4NyKWZrATqdLua/M70C20QfOafvxKgRAW1innXPZ7kE=";
+          allowedIPs = [ "198.18.0.4/32" ];
         }
       ];
     };
