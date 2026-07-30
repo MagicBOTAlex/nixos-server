@@ -44,9 +44,11 @@
     ./vms/kube-networking.nix
     # ./networking/wireguard-kube.nix
 
+    ./modules/dns.nix
+    ./networking/hotspot.nix
+
     # snorre! do not touch. This is for work. wg on port 51100
     ./modules/countr-wg.nix
-    ./modules/dns.nix
 
     # ./modules/de.nix
     ./modules/displayOff.nix

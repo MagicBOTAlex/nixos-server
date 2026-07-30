@@ -29,7 +29,7 @@
       wg-keys = "wg genkey > privatekey && wg pubkey < privatekey > publickey";
       k = "kubectl";
       metal = "ssh metal@192.168.50.59";
-      countr = "ssh mjid@198.18.0.2";
+      countr = "ssh mjid@198.222.0.2";
 
     };
 

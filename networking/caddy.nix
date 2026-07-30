@@ -74,6 +74,34 @@
     '';
   };
 
+  services.caddy.virtualHosts."sonarr.deprived.internal" = {
+    extraConfig = ''
+      tls internal
+      reverse_proxy * 192.168.50.59:8989
+    '';
+  };
+
+  services.caddy.virtualHosts."radarr.deprived.internal" = {
+    extraConfig = ''
+      tls internal
+      reverse_proxy * 192.168.50.59:7878
+    '';
+  };
+
+  services.caddy.virtualHosts."prowlarr.deprived.internal" = {
+    extraConfig = ''
+      tls internal
+      reverse_proxy * 192.168.50.59:9696
+    '';
+  };
+
+  services.caddy.virtualHosts."qbit.deprived.internal" = {
+    extraConfig = ''
+      tls internal
+      reverse_proxy * 192.168.50.59:8080
+    '';
+  };
+
   # services.caddy.virtualHosts."penpot.deprived.dev" = {
   #   extraConfig = ''
   #     reverse_proxy * 127.0.0.1:5544
@@ -107,6 +135,17 @@
       }
 
       reverse_proxy * 192.168.50.58:3232
+    '';
+  };
+
+  services.caddy.virtualHosts."countr.devcam.deprived.dev" = {
+    extraConfig = ''
+      @protected not method OPTIONS
+      basicauth @protected {
+        countr $2a$14$FHE/HpcgwjwiUb5YilPX6.ligSHswruRiJGwDkG9GNWjpF78En7DC
+      }
+
+      reverse_proxy * 198.222.0.2:3232
     '';
   };
 
