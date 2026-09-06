@@ -26,7 +26,9 @@
     ./modules/nodejs.nix
 
     ./modules/fishShell.nix
+    ./modules/libreTranslate.nix
     ./modules/pigs.nix
+    ./modules/mosh.nix
 
     ./users.nix
     ./networking/caddy.nix
@@ -46,6 +48,7 @@
 
     ./modules/dns.nix
     ./networking/hotspot.nix
+    ./modules/ollama.nix
 
     # snorre! do not touch. This is for work. wg on port 51100
     ./modules/countr-wg.nix
@@ -53,6 +56,22 @@
     # ./modules/de.nix
     ./modules/displayOff.nix
   ];
+  nix.settings = {
+    # download-attempts = 1;
+    # connect-timeout = 1;
+    substituters = [
+      "https://cache.nixos.org"
+      "https://nix-community.cachix.org"
+      "https://cache.nixos-cuda.org"
+      # "https://cache.deprived.dev"
+    ];
+    trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
+      # "cache.deprived.dev:B5o97KpSrgbN7OxZCLu0LQYxg+Bj0pB1WiKY5n0HfLY="
+    ];
+  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;

@@ -53,34 +53,34 @@
         ProtectProc = "default";
       };
     };
-    ot-nrf-runner = {
-      enable = true;
-      url = "https://github.com/MagicBOTAlex/nrf52840-OpenThread"; # Or organization URL
-      tokenFile = "/var/lib/github-runner/token";
-
-      # Custom labels to target this runner in your GitHub workflows
-      extraLabels = [ "nixos" "production" ];
-
-      # Packages available to the runner script execution environment
-      extraPackages = with pkgs; [
-        git
-        curl
-        gnumake
-        cmake
-        nodejs_20 # Essential for GitHub Actions runner
-
-        # ARM Cross-compiler and C libraries required for nRF52840
-        gcc-arm-embedded
-        libossp_uuid # Often required by tools handling firmware IDs
-
-        # Python environment with required tools (nrfutil equivalent or dependencies)
-        (python3.withPackages (ps: with ps; [
-          pip
-          setuptools
-          # Note: 'nrfutil' is proprietary and usually not in nixpkgs. 
-          # If your build script strictly relies on it, we can fetch it or use a shell.
-        ]))
-      ];
-    };
+    # ot-nrf-runner = {
+    #   enable = true;
+    #   url = "https://github.com/MagicBOTAlex/nrf52840-OpenThread"; # Or organization URL
+    #   tokenFile = "/var/lib/github-runner/token";
+    #
+    #   # Custom labels to target this runner in your GitHub workflows
+    #   extraLabels = [ "nixos" "production" ];
+    #
+    #   # Packages available to the runner script execution environment
+    #   extraPackages = with pkgs; [
+    #     git
+    #     curl
+    #     gnumake
+    #     cmake
+    #     nodejs_20 # Essential for GitHub Actions runner
+    #
+    #     # ARM Cross-compiler and C libraries required for nRF52840
+    #     gcc-arm-embedded
+    #     libossp_uuid # Often required by tools handling firmware IDs
+    #
+    #     # Python environment with required tools (nrfutil equivalent or dependencies)
+    #     (python3.withPackages (ps: with ps; [
+    #       pip
+    #       setuptools
+    #       # Note: 'nrfutil' is proprietary and usually not in nixpkgs. 
+    #       # If your build script strictly relies on it, we can fetch it or use a shell.
+    #     ]))
+    #   ];
+    # };
   };
 }

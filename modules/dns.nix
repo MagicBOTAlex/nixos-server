@@ -24,6 +24,9 @@
         "/radarr.deprived.internal/192.168.50.82"
         "/prowlarr.deprived.internal/192.168.50.82"
         "/qbit.deprived.internal/192.168.50.82"
+        "/jelly.deprived.dev/192.168.50.82"
+        "/seer.deprived.dev/192.168.50.82"
+        "/ha.deprived.dev/192.168.50.82"
       ];
 
       # Upstream DNS servers for internet queries

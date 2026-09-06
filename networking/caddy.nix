@@ -2,7 +2,15 @@
 {
   imports = [ ./networkSetup.nix ];
 
-  services.caddy.enable = true;
+  services.caddy = {
+    enable = true;
+    # package = pkgs.caddy.withPlugins {
+    #   plugins = [
+    #     "github.com/mholt/caddy-ratelimit@latest"
+    #   ];
+    #   hash = "";
+    # };
+  };
 
   services.caddy.virtualHosts."immich.deprived.dev" = {
     extraConfig = ''
@@ -18,7 +26,7 @@
 
   services.caddy.virtualHosts."trans.deprived.dev" = {
     extraConfig = ''
-      reverse_proxy 192.168.50.58:1422
+      reverse_proxy 127.0.0.1:1422
     '';
   };
 
@@ -44,17 +52,17 @@
     '';
   };
 
-  services.caddy.virtualHosts."yaaumma.com" = {
-    extraConfig = ''
-      redir https://www.yaaumma.com{uri} permanent
-    '';
-  };
+  # services.caddy.virtualHosts."yaaumma.com" = {
+  #   extraConfig = ''
+  #     redir https://www.yaaumma.com{uri} permanent
+  #   '';
+  # };
 
-  services.caddy.virtualHosts."api-ikhlas.systemfutura.com" = {
-    extraConfig = ''
-      reverse_proxy http://api.ikhlas.dk
-    '';
-  };
+  # services.caddy.virtualHosts."api-ikhlas.systemfutura.com" = {
+  #   extraConfig = ''
+  #     reverse_proxy http://api.ikhlas.dk
+  #   '';
+  # };
 
   services.caddy.virtualHosts."jelly.deprived.dev" = {
     extraConfig = ''
@@ -102,6 +110,29 @@
     '';
   };
 
+  services.caddy.virtualHosts."metal.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 192.168.50.59:8000
+    '';
+  };
+  services.caddy.virtualHosts."metal2.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 192.168.50.59:8001
+    '';
+  };
+  services.caddy.virtualHosts."fitness.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 192.168.50.59:3004
+    '';
+  };
+
+  services.caddy.virtualHosts."learncc4.deprived.dev" = {
+    extraConfig = ''
+      root * /var/www/learncc4
+      file_server
+      try_files {path} /index.html
+    '';
+  };
   # services.caddy.virtualHosts."penpot.deprived.dev" = {
   #   extraConfig = ''
   #     reverse_proxy * 127.0.0.1:5544
@@ -390,22 +421,22 @@
   #   '';
   # };
 
-  services.caddy.virtualHosts."zcol.deprived.dev" = {
-    extraConfig = ''
-      reverse_proxy * 127.0.0.1:7577
-    '';
-  };
+  # services.caddy.virtualHosts."zcol.deprived.dev" = {
+  #   extraConfig = ''
+  #     reverse_proxy * 127.0.0.1:7577
+  #   '';
+  # };
 
-  services.caddy.virtualHosts."zcollection.deprived.dev" = {
-    extraConfig = ''
-      reverse_proxy * 127.0.0.1:7577
-    '';
-  };
-  services.caddy.virtualHosts."zcollection.mcd.deprived.dev" = {
-    extraConfig = ''
-      reverse_proxy * 127.0.0.1:7578
-    '';
-  };
+  # services.caddy.virtualHosts."zcollection.deprived.dev" = {
+  #   extraConfig = ''
+  #     reverse_proxy * 127.0.0.1:7577
+  #   '';
+  # };
+  # services.caddy.virtualHosts."zcollection.mcd.deprived.dev" = {
+  #   extraConfig = ''
+  #     reverse_proxy * 127.0.0.1:7578
+  #   '';
+  # };
 
   # services.caddy.virtualHosts."direct.stream.deprived.dev" = {
   #   extraConfig = ''
