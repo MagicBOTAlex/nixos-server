@@ -5,6 +5,7 @@
 
     shellAliases = {
       nrb = "sudo nixos-rebuild switch --flake /etc/nixos --impure";
+      nrbs = " sudo nixos-rebuild switch --flake /etc/nixos --impure --fallback -j 1";
       ni = "nvim /etc/nixos/configuration.nix";
       bat = "upower -i /org/freedesktop/UPower/devices/battery_BAT0| grep -E 'state|percentage'";
       gpu = "nvidia-smi -q | grep -i 'draw.*W'";

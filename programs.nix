@@ -31,7 +31,7 @@
     parted
     toybox
     gitoxide
-    (pkgs.callPackage ./modules/customPackages/shreddit/shreddit.nix { })
+    # (pkgs.callPackage ./modules/customPackages/shreddit/shreddit.nix { })
     busybox
     linuxKernel.packages.linux_6_12.turbostat
     linuxKernel.packages.linux_6_12.cpupower

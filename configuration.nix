@@ -14,41 +14,42 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./aliases.nix
-    ./modules/drivers/nvidia.nix
+    # ./modules/drivers/nvidia.nix
     ./docker.nix
     # ./modules/k8s.nix
-    ./modules/oscd.nix
+    # ./modules/oscd.nix
 
     ./ports.nix
 
-    ./modules/python.nix
+    # ./modules/python.nix
     ./programs.nix
-    ./modules/nodejs.nix
+    # ./modules/nodejs.nix
 
     ./modules/fishShell.nix
-    ./modules/libreTranslate.nix
-    ./modules/pigs.nix
+    # ./modules/libreTranslate.nix
+    # ./modules/pigs.nix
     ./modules/mosh.nix
 
     ./users.nix
     ./networking/caddy.nix
     # ./networking/nginx.nix
-    ./modules/buildCache.nix
+    # ./modules/buildCache.nix
     ./modules/github-runner.nix
 
     ./modules/nfs.nix
 
-    ./kubenetes
+    # ./kubenetes
 
     # ./vms/kube-vm
     # ./vms/kube-vm2
-    ./vms/kube-daddy
+    # ./vms/kube-daddy
     ./vms/kube-networking.nix
     # ./networking/wireguard-kube.nix
+    ./networking/direct_metal_network.nix
 
     ./modules/dns.nix
-    ./networking/hotspot.nix
-    ./modules/ollama.nix
+    # ./networking/hotspot.nix
+    # ./modules/ollama.nix
 
     # snorre! do not touch. This is for work. wg on port 51100
     ./modules/countr-wg.nix

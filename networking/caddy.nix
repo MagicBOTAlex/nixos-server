@@ -66,7 +66,7 @@
 
   services.caddy.virtualHosts."jelly.deprived.dev" = {
     extraConfig = ''
-      reverse_proxy * 127.0.0.1:8096
+      reverse_proxy * 192.168.50.59:8096
     '';
   };
 

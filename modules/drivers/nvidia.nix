@@ -5,8 +5,30 @@
 }: {
   nixpkgs.config.nvidia.acceptLicense = true;
   services.xserver.videoDrivers = [ "nvidia" ];
-    nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.cudaSupport = true;
+  nixpkgs.config.allowUnfree = true;
+  # nixpkgs.config.cudaSupport = true;
+
+  nixpkgs.overlays = [
+    (final: prev: {
+      suitesparse = prev.suitesparse.overrideAttrs (oldAttrs: {
+        cmakeFlags = (oldAttrs.cmakeFlags or [ ]) ++ [
+          "-DSUITESPARSE_USE_CUDA=OFF"
+          "-DCMAKE_DISABLE_FIND_PACKAGE_CUDA=TRUE"
+          "-DCMAKE_DISABLE_FIND_PACKAGE_CUDAToolkit=TRUE"
+        ];
+        buildInputs = builtins.filter
+          (
+            pkg: !lib.hasInfix "cuda" (pkg.name or "")
+          )
+          (oldAttrs.buildInputs or [ ]);
+        nativeBuildInputs = builtins.filter
+          (
+            pkg: !lib.hasInfix "cuda" (pkg.name or "")
+          )
+          (oldAttrs.nativeBuildInputs or [ ]);
+      });
+    })
+  ];
 
 
   boot.kernelParams = [ "nvidia.NVreg_PreserveVideoMemoryAllocations=1" ];
