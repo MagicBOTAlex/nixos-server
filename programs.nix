@@ -35,6 +35,7 @@
     busybox
     linuxKernel.packages.linux_6_12.turbostat
     linuxKernel.packages.linux_6_12.cpupower
+    opencode
 
   ];
 

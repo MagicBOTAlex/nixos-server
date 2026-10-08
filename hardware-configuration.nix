@@ -35,14 +35,13 @@
     options = [ "fmask=0077" "dmask=0077" ];
   };
 
-  # fileSystems."/mnt/stolenFromSister" = {
-  #   device = "/dev/disk/by-uuid/8f2c41c0-84bb-40ee-a3f8-b1bbd378d5d7";
-  #   fsType = "ext4"; # or "btrfs", "xfs", etc.
-  #   options = [
-  #     "nofail"
-  #     "x-systemd.automount"
-  #   ]; # don't block boot if the disk is missing
-  # };
+  fileSystems."/downloads" = {
+    device = "/dev/disk/by-uuid/76f3a898-ca88-436f-9861-fd0dd89f9d58";
+    fsType = "ext4";
+    options = [
+      "nofail" # Keeps system bootable if missing, but mounts on boot without autofs
+    ];
+  };
 
   # fileSystems."/mnt/OtherStolenDriveFromSister" = {
   #   device = "/dev/disk/by-uuid/fc16759c-24fc-46d6-99fe-865068605f46";

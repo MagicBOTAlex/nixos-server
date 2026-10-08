@@ -21,7 +21,7 @@
 
     ./ports.nix
 
-    # ./modules/python.nix
+    # ./modules/python.nix192.168.50.1/2o
     ./programs.nix
     # ./modules/nodejs.nix
 
@@ -53,6 +53,7 @@
 
     # snorre! do not touch. This is for work. wg on port 51100
     ./modules/countr-wg.nix
+    ./modules/static-serve.nix
 
     # ./modules/de.nix
     ./modules/displayOff.nix

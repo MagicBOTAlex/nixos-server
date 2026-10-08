@@ -53,6 +53,31 @@
         ProtectProc = "default";
       };
     };
+    countr-mobile = {
+      enable = true;
+      url = "https://github.com/Countr-Electronics/mobile";
+      tokenFile = "/var/lib/github-runner/countr/mobile-token";
+      extraLabels = [ "nixos" "mobile" ];
+
+      user = "github-runner";
+
+      package = (pkgs.github-runner.override {
+        nodeRuntimes = [ "node24" ];
+      }).overrideAttrs (old: {
+        postInstall = (old.postInstall or "") + ''
+          ln -s $out/lib/externals/node24 $out/lib/externals/node20
+        '';
+      });
+
+      extraPackages = with pkgs; [
+        nix
+        git
+        curl
+        gnumake
+        nodejs
+      ];
+    };
+
     # ot-nrf-runner = {
     #   enable = true;
     #   url = "https://github.com/MagicBOTAlex/nrf52840-OpenThread"; # Or organization URL

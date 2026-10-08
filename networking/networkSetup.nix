@@ -4,6 +4,9 @@
   security.acme.acceptTerms = true;
   security.acme.defaults.email = "zhen@deprived.dev";
   networking.firewall.enable = true;
+  systemd.services.NetworkManager-wait-online.enable = false;
+  systemd.network.wait-online.anyInterface = true;
+
 
   networking.useNetworkd = true;
   networking.useDHCP = false;
@@ -24,13 +27,13 @@
 
   networking.firewall = {
 
-      trustedInterfaces = [ "wpan0" ];
-    };
+    trustedInterfaces = [ "wpan0" ];
+  };
 
-services.avahi = {
-   enable = true;
-   nssmdns4 = true;  # Allows hostname resolution via mDNS (IPv4)
-   nssmdns6 = true;  # Allows hostname resolution via mDNS (IPv6)
-   openFirewall = true; # Automatically opens UDP port 5353
- };
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true; # Allows hostname resolution via mDNS (IPv4)
+    nssmdns6 = true; # Allows hostname resolution via mDNS (IPv6)
+    openFirewall = true; # Automatically opens UDP port 5353
+  };
 }

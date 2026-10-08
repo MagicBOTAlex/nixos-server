@@ -78,7 +78,7 @@
 
   services.caddy.virtualHosts."seer.deprived.dev" = {
     extraConfig = ''
-      reverse_proxy * 127.0.0.1:5055
+      reverse_proxy * 192.168.50.59:5055
     '';
   };
 
@@ -179,6 +179,22 @@
       reverse_proxy * 198.222.0.2:3232
     '';
   };
+  services.caddy.virtualHosts."countr.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 127.0.0.1:5323
+    '';
+  };
+  services.caddy.virtualHosts."static.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 127.0.0.1:6233
+    '';
+  };
+
+  services.caddy.virtualHosts."providarr.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 127.0.0.1:4155
+    '';
+  };
 
   services.caddy.virtualHosts."api.deprived.dev" = {
     extraConfig = ''
@@ -244,63 +260,63 @@
 
   services.caddy.virtualHosts."pocket.deprived.dev" = {
     extraConfig = ''
-        @allowedOrigin header_regexp Origin ^https?://(localhost(:\d+)?|([a-z0-9-]+\.)*deprived\.dev)$
-      	@hasOrigin header Origin *
-      	@preflight method OPTIONS
+      @allowedOrigin header_regexp Origin ^https?://(localhost(:\d+)?|([a-z0-9-]+\.)*deprived\.dev|([a-z0-9-]+\.)*countrbox\.com)$
+      @hasOrigin header Origin *
+      @preflight method OPTIONS
 
-      	@badOrigin {
-      		not {
-      			header_regexp Origin ^https?://(localhost(:\d+)?|([a-z0-9-]+\.)*deprived\.dev)$
-      		}
-      		header Origin *
-      	}
+      @badOrigin {
+          not {
+              header_regexp Origin ^https?://(localhost(:\d+)?|([a-z0-9-]+\.)*deprived\.dev|([a-z0-9-]+\.)*countrbox\.com)$
+          }
+          header Origin *
+      }
 
-      	@preflightAllowed {
-      		method OPTIONS
-      		header_regexp Origin ^https?://(localhost(:\d+)?|([a-z0-9-]+\.)*deprived\.dev)$
-      	}
+      @preflightAllowed {
+          method OPTIONS
+          header_regexp Origin ^https?://(localhost(:\d+)?|([a-z0-9-]+\.)*deprived\.dev|([a-z0-9-]+\.)*countrbox\.com)$
+      }
 
-      	# Allowed preflight
-      	handle @preflightAllowed {
-      		header {
-      			Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE"
-      			Access-Control-Allow-Headers "{http.request.header.Access-Control-Request-Headers}"
-      			Access-Control-Max-Age "3600"
-      			Access-Control-Allow-Credentials "true"
-      			Access-Control-Allow-Origin "{http.request.header.Origin}"
-      			Vary "Origin"
-      		}
-      		respond "" 204
-      	}
+      # Allowed preflight
+      handle @preflightAllowed {
+          header {
+              Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE"
+              Access-Control-Allow-Headers "{http.request.header.Access-Control-Request-Headers}"
+              Access-Control-Max-Age "3600"
+              Access-Control-Allow-Credentials "true"
+              Access-Control-Allow-Origin "{http.request.header.Origin}"
+              Vary "Origin"
+          }
+          respond "" 204
+      }
 
-      	# Preflight but missing/bad origin
-      	handle @preflight {
-      		respond "CORS origin not allowed" 403
-      	}
+      # Preflight but missing/bad origin
+      handle @preflight {
+          respond "CORS origin not allowed" 403
+      }
 
-      	# Block actual requests with bad origin
-      	handle @badOrigin {
-      		respond "CORS origin not allowed" 403
-      	}
+      # Block actual requests with bad origin
+      handle @badOrigin {
+          respond "CORS origin not allowed" 403
+      }
 
-      	# Allowed origins → proxy + always add CORS (even if upstream returns 204)
-      	handle @allowedOrigin {
-      		reverse_proxy 127.0.0.1:3433 {
-      			header_down -Access-Control-*
-      			header_down -Vary
-      		}
-      		header {
-      			Access-Control-Allow-Origin "{http.request.header.Origin}"
-      			Access-Control-Allow-Credentials "true"
-      			Access-Control-Expose-Headers "Authorization"
-      			Vary "Origin"
-      		}
-      	}
+      # Allowed origins → proxy + always add CORS (even if upstream returns 204)
+      handle @allowedOrigin {
+          reverse_proxy 127.0.0.1:3433 {
+              header_down -Access-Control-*
+              header_down -Vary
+          }
+          header {
+              Access-Control-Allow-Origin "{http.request.header.Origin}"
+              Access-Control-Allow-Credentials "true"
+              Access-Control-Expose-Headers "Authorization"
+              Vary "Origin"
+          }
+      }
 
-      	# No Origin: just proxy
-      	handle {
-      		reverse_proxy 127.0.0.1:3433
-      	}
+      # No Origin: just proxy
+      handle {
+          reverse_proxy 127.0.0.1:3433
+      }
 
     '';
   };
