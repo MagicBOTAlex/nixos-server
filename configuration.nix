@@ -35,6 +35,7 @@
     # ./networking/nginx.nix
     # ./modules/buildCache.nix
     ./modules/github-runner.nix
+    ./modules/forgejo-runner.nix
 
     ./modules/nfs.nix
 

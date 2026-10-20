@@ -158,16 +158,16 @@
     '';
   };
 
-  services.caddy.virtualHosts."devcam.deprived.dev" = {
-    extraConfig = ''
-      @protected not method OPTIONS
-      basicauth @protected {
-        alex $2a$14$GbqQnETcOz5fNEbS06Y0E.HxRIIgPKAK7OMijT1Bv63h3V6S/gwRG
-      }
-
-      reverse_proxy * 192.168.50.58:3232
-    '';
-  };
+  # services.caddy.virtualHosts."devcam.deprived.dev" = {
+  #   extraConfig = ''
+  #     @protected not method OPTIONS
+  #     basicauth @protected {
+  #       alex $2a$14$GbqQnETcOz5fNEbS06Y0E.HxRIIgPKAK7OMijT1Bv63h3V6S/gwRG
+  #     }
+  #
+  #     reverse_proxy * 192.168.50.58:3232
+  #   '';
+  # };
 
   services.caddy.virtualHosts."countr.devcam.deprived.dev" = {
     extraConfig = ''
@@ -184,9 +184,38 @@
       reverse_proxy * 127.0.0.1:5323
     '';
   };
+  services.caddy.virtualHosts."countr.webhook.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 127.0.0.1:5324
+    '';
+  };
   services.caddy.virtualHosts."static.deprived.dev" = {
     extraConfig = ''
-      reverse_proxy * 127.0.0.1:6233
+      reverse_proxy * 192.168.50.82:6233
+    '';
+  };
+  services.caddy.virtualHosts."vault.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 192.168.50.59:44442
+    '';
+  };
+
+  services.caddy.virtualHosts."deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 127.0.0.1:8883
+    '';
+  };
+
+  services.caddy.virtualHosts."www.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 127.0.0.1:8883
+    '';
+  };
+
+  # Github MaintainerCD hook for the deprived website
+  services.caddy.virtualHosts."webhook.deprived.dev" = {
+    extraConfig = ''
+      reverse_proxy * 127.0.0.1:5322
     '';
   };
 

@@ -14,12 +14,18 @@
   };
   users.groups.github-runner = { };
 
+  systemd.tmpfiles.rules = [
+    "d /var/lib/github-runner/countr-runner-work 0700 github-runner github-runner -"
+  ];
+
   services.github-runners = {
-    countr-runner = {
+    countr-runner-botserver = {
       enable = true;
-      url = "https://github.com/Countr-Electronics/Firmware";
-      tokenFile = "/var/lib/github-runner/token";
+      url = "https://github.com/Countr-Electronics";
+      tokenFile = "/var/lib/github-runner/countr/token";
       extraLabels = [ "nixos" "production" ];
+      workDir = "/var/lib/github-runner/countr-runner-work";
+      replace = true;
 
       user = "github-runner";
 
@@ -53,59 +59,5 @@
         ProtectProc = "default";
       };
     };
-    countr-mobile = {
-      enable = true;
-      url = "https://github.com/Countr-Electronics/mobile";
-      tokenFile = "/var/lib/github-runner/countr/mobile-token";
-      extraLabels = [ "nixos" "mobile" ];
-
-      user = "github-runner";
-
-      package = (pkgs.github-runner.override {
-        nodeRuntimes = [ "node24" ];
-      }).overrideAttrs (old: {
-        postInstall = (old.postInstall or "") + ''
-          ln -s $out/lib/externals/node24 $out/lib/externals/node20
-        '';
-      });
-
-      extraPackages = with pkgs; [
-        nix
-        git
-        curl
-        gnumake
-        nodejs
-      ];
-    };
-
-    # ot-nrf-runner = {
-    #   enable = true;
-    #   url = "https://github.com/MagicBOTAlex/nrf52840-OpenThread"; # Or organization URL
-    #   tokenFile = "/var/lib/github-runner/token";
-    #
-    #   # Custom labels to target this runner in your GitHub workflows
-    #   extraLabels = [ "nixos" "production" ];
-    #
-    #   # Packages available to the runner script execution environment
-    #   extraPackages = with pkgs; [
-    #     git
-    #     curl
-    #     gnumake
-    #     cmake
-    #     nodejs_20 # Essential for GitHub Actions runner
-    #
-    #     # ARM Cross-compiler and C libraries required for nRF52840
-    #     gcc-arm-embedded
-    #     libossp_uuid # Often required by tools handling firmware IDs
-    #
-    #     # Python environment with required tools (nrfutil equivalent or dependencies)
-    #     (python3.withPackages (ps: with ps; [
-    #       pip
-    #       setuptools
-    #       # Note: 'nrfutil' is proprietary and usually not in nixpkgs. 
-    #       # If your build script strictly relies on it, we can fetch it or use a shell.
-    #     ]))
-    #   ];
-    # };
   };
 }
